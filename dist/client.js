@@ -7,14 +7,5 @@ const api = new api_1.Api({
   baseApiParams: {
     secure: true,
   },
-  securityWorker: async (securityData) => {
-    if (securityData) {
-      return {
-        headers: {
-          Authorization: `Bearer ${securityData}`,
-        },
-      };
-    }
-  },
 });
 exports.client = api;

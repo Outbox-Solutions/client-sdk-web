@@ -15881,6 +15881,30 @@ export interface CreateOutboundCallDTO {
    */
   customer?: CreateCustomerDTO;
 }
+export interface CreateAgentWebCallDTO {
+  /**
+   * These are the overrides for the agent's settings and template variables.
+   */
+  assistantOverrides?: AssistantOverrides;
+  /**
+   * This is the squad that will be used for the call. To use a transient squad, use `squad` instead.
+   */
+  squadId?: string;
+  /**
+   * This is the squad that will be used for the call. To use an existing squad, use `squadId` instead.
+   */
+  squad?: CreateSquadDTO;
+  /**
+   * This is the workflow that will be used for the call. To use a transient workflow, use `workflow` instead.
+   */
+  workflowId?: string;
+  /**
+   * This is the workflow that will be used for the call. To use an existing workflow, use `workflowId` instead.
+   */
+  workflow?: CreateWorkflowDTO;
+  /** These are the overrides for the `workflow` or `workflowId`'s settings and template variables. */
+  workflowOverrides?: WorkflowOverrides;
+}
 export interface CreateWebCallDTO {
   /**
    * This is the assistant ID that will be used for the call. To use a transient assistant, use `assistant` instead.
@@ -34439,6 +34463,19 @@ export declare class Api<
      */
     callControllerCreateWebCall: (
       data: CreateWebCallDTO,
+      params?: RequestParams
+    ) => Promise<HttpResponse<Call, any>>;
+    /**
+     * No description
+     *
+     * @tags Calls
+     * @name CallControllerCreateAgentWebCall
+     * @summary Create Agent Web Call
+     * @request POST:/agent/call/web/{agentId}
+     */
+    callControllerCreateAgentWebCall: (
+      agentId: string,
+      data: CreateAgentWebCallDTO,
       params?: RequestParams
     ) => Promise<HttpResponse<Call, any>>;
   };

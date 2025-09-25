@@ -16177,6 +16177,31 @@ export interface CreateOutboundCallDTO {
   customer?: CreateCustomerDTO;
 }
 
+export interface CreateAgentWebCallDTO {
+  /**
+   * These are the overrides for the agent's settings and template variables.
+   */
+  assistantOverrides?: AssistantOverrides;
+  /**
+   * This is the squad that will be used for the call. To use a transient squad, use `squad` instead.
+   */
+  squadId?: string;
+  /**
+   * This is the squad that will be used for the call. To use an existing squad, use `squadId` instead.
+   */
+  squad?: CreateSquadDTO;
+  /**
+   * This is the workflow that will be used for the call. To use a transient workflow, use `workflow` instead.
+   */
+  workflowId?: string;
+  /**
+   * This is the workflow that will be used for the call. To use an existing workflow, use `workflowId` instead.
+   */
+  workflow?: CreateWorkflowDTO;
+  /** These are the overrides for the `workflow` or `workflowId`'s settings and template variables. */
+  workflowOverrides?: WorkflowOverrides;
+}
+
 export interface CreateWebCallDTO {
   /**
    * This is the assistant ID that will be used for the call. To use a transient assistant, use `assistant` instead.
@@ -35354,14 +35379,38 @@ export class Api<
      * @secure
      */
     callControllerCreateWebCall: (
+      agentId: string,
       data: CreateWebCallDTO,
       params: RequestParams = {}
     ) =>
       this.request<Call, any>({
-        path: `/call/web`,
+        path: `/agent/call/web/${agentId}/`,
         method: "POST",
         body: data,
         secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Calls
+     * @name CallControllerCreateAgentWebCall
+     * @summary Create Agent Web Call
+     * @request POST:/agent/call/web/{agentId}
+     */
+    callControllerCreateAgentWebCall: (
+      agentId: string,
+      data: CreateAgentWebCallDTO,
+      params: RequestParams = {}
+    ) =>
+      this.request<Call, any>({
+        path: `/agent/call/web/${agentId}/`,
+        method: "POST",
+        body: data,
+        secure: false,
         type: ContentType.Json,
         format: "json",
         ...params,

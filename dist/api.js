@@ -325,12 +325,30 @@ class Api extends HttpClient {
      * @request POST:/call/web
      * @secure
      */
-    callControllerCreateWebCall: (data, params = {}) =>
+    callControllerCreateWebCall: (agentId, data, params = {}) =>
       this.request({
-        path: `/call/web`,
+        path: `/agent/call/web/${agentId}/`,
         method: "POST",
         body: data,
         secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+    /**
+     * No description
+     *
+     * @tags Calls
+     * @name CallControllerCreateAgentWebCall
+     * @summary Create Agent Web Call
+     * @request POST:/agent/call/web/{agentId}
+     */
+    callControllerCreateAgentWebCall: (agentId, data, params = {}) =>
+      this.request({
+        path: `/agent/call/web/${agentId}/`,
+        method: "POST",
+        body: data,
+        secure: false,
         type: ContentType.Json,
         format: "json",
         ...params,

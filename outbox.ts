@@ -233,7 +233,7 @@ export default class Vapi extends VapiEventEmitter {
   }
 
   async start(
-    assistant?: CreateAssistantDTO | string,
+    agent?: CreateAssistantDTO | string,
     assistantOverrides?: AssistantOverrides,
     squad?: CreateSquadDTO | string,
     workflow?: CreateWorkflowDTO | string,
@@ -242,10 +242,8 @@ export default class Vapi extends VapiEventEmitter {
     const startTime = Date.now();
 
     // Input validation with detailed error messages
-    if (!assistant && !squad && !workflow) {
-      const error = new Error(
-        "Assistant or Squad or Workflow must be provided."
-      );
+    if (!agent && !squad && !workflow) {
+      const error = new Error("Agent or Squad or Workflow must be provided.");
       this.emit("error", {
         type: "validation-error",
         stage: "input-validation",
@@ -270,7 +268,7 @@ export default class Vapi extends VapiEventEmitter {
       status: "started",
       timestamp: new Date().toISOString(),
       metadata: {
-        hasAssistant: !!assistant,
+        hasAgent: !!agent,
         hasSquad: !!squad,
         hasWorkflow: !!workflow,
       },
@@ -288,10 +286,11 @@ export default class Vapi extends VapiEventEmitter {
 
       const webCallStartTime = Date.now();
 
+      // Determine the agentId - must be a string
+      const agentId = typeof agent === "string" ? agent : "default-agent";
+
       const webCall = (
-        await client.call.callControllerCreateWebCall({
-          assistant: typeof assistant === "string" ? undefined : assistant,
-          assistantId: typeof assistant === "string" ? assistant : undefined,
+        await client.call.callControllerCreateAgentWebCall(agentId, {
           assistantOverrides,
           squad: typeof squad === "string" ? undefined : squad,
           squadId: typeof squad === "string" ? squad : undefined,
@@ -721,7 +720,7 @@ export default class Vapi extends VapiEventEmitter {
         errorStack: e instanceof Error ? e.stack : "No stack trace available",
         timestamp: new Date().toISOString(),
         context: {
-          hasAssistant: !!assistant,
+          hasAgent: !!agent,
           hasSquad: !!squad,
           hasWorkflow: !!workflow,
           isMobile: this.isMobileDevice(),
@@ -736,7 +735,7 @@ export default class Vapi extends VapiEventEmitter {
         totalDuration,
         timestamp: new Date().toISOString(),
         context: {
-          hasAssistant: !!assistant,
+          hasAgent: !!agent,
           hasSquad: !!squad,
           hasWorkflow: !!workflow,
           isMobile: this.isMobileDevice(),

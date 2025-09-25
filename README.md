@@ -21,16 +21,16 @@ import Outbox from "@outbox-ai/web";
 Then, create a new instance of the Outbox class, passing your Public Key as a parameter to the constructor:
 
 ```javascript
-const outbox = new Outbox("your-public-key");
+const outbox = new Outbox();
 ```
 
-You can start a new call by calling the `start` method and passing an `assistant` object or `assistantId`:
+You can start a new call by calling the `start` method and passing an `agent` object or `agentId`:
 
 ```javascript
 outbox.start({
   model: {
     provider: "openai",
-    model: "gpt-3.5-turbo",
+    model: "gpt-4.1",
     messages: [
       {
         role: "system",
@@ -47,26 +47,26 @@ outbox.start({
 ```
 
 ```javascript
-outbox.start("your-assistant-id");
+outbox.start("your-agent-id");
 ```
 
 The `start` method will initiate a new call.
 
-You can override existing assistant parameters or set variables with the `assistant_overrides` parameter.
+You can override existing agent parameters or set variables.
 Assume the first message is `Hey, {{name}} how are you?` and you want to set the value of `name` to `John`:
 
 ```javascript
-const assistantOverrides = {
+const agentOverrides = {
   recordingEnabled: false,
   variableValues: {
     name: "John",
   },
 };
 
-outbox.start("your-assistant-id", assistantOverrides);
+outbox.start("your-agent-id", agentOverrides);
 ```
 
-You can send text messages to the assistant aside from the audio input using the `send` method and passing appropriate `role` and `content`.
+You can send text messages to the agent aside from the audio input using the `send` method and passing appropriate `role` and `content`.
 
 ```javascript
 outbox.send({
@@ -124,7 +124,7 @@ outbox.on("call-end", () => {
 });
 
 outbox.on("volume-level", (volume) => {
-  console.log(`Assistant volume level: ${volume}`);
+  console.log(`Agent volume level: ${volume}`);
 });
 
 // Function calls and transcripts will be sent via messages
